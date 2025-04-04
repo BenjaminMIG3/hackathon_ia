@@ -6,10 +6,10 @@
 **Mac** : main.app à la racine<br> 
 **Windows** : - se mettre à la racine du projet<br>
               - entrer les commandes python suivantes :
-                    python -m venv venv 
-                    env\Scripts\activate
-                    pip install -r requirements.txt 
-                    python main.py
+                    python -m venv venv<br>
+                    env\Scripts\activate<br>
+                    pip install -r requirements.txt<br> 
+                    python main.py<br>
 
 ## 🎮 Comment jouer ? 
 - **Contrôles** : Flèches directionnelles pour se déplacer.
