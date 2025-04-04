@@ -11,7 +11,7 @@ ESPACE_HUD = 40
 LARGEUR, HAUTEUR = LARGEUR_JEU, HAUTEUR_JEU + ESPACE_HUD
 TAILLE_CASE = 40
 FENETRE = pygame.display.set_mode((LARGEUR, HAUTEUR))
-pygame.display.set_caption("Snake")
+pygame.display.set_caption("DEEP SNAKE")
 
 # Couleurs
 BLANC = (255, 255, 255)
@@ -91,7 +91,7 @@ def ecran_accueil():
 
         FENETRE.fill(NOIR)
         # Titre
-        titre = font.render("Snake Game", True, BLANC)
+        titre = font.render("DEEP SNAKE", True, BLANC)
         titre_rect = titre.get_rect(center=(LARGEUR // 2, HAUTEUR // 3))
         FENETRE.blit(titre, titre_rect)
 
