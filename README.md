@@ -12,7 +12,7 @@
 &nbsp;&nbsp;env\Scripts\activate<br>
 &nbsp;&nbsp;pip install -r requirements.txt<br> 
 &nbsp;&nbsp;python main.py<br>
-+
+
 ## 🎮 Comment jouer ? 
 - **Contrôles** : Flèches directionnelles pour se déplacer.
 - **Objectif** : Eviter de surcharger le serveur.
