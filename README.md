@@ -4,12 +4,12 @@
 
 ## Lancement : 
 **Mac** : main.app à la racine<br> 
-**Windows** : - se mettre à la racine du projet<br>
-              - entrer les commandes python suivantes :
-                    python -m venv venv<br>
-                    env\Scripts\activate<br>
-                    pip install -r requirements.txt<br> 
-                    python main.py<br>
+**Windows** : à la racine du projet, exécuter les commandes suivantes :<br>
+
+&nbsp;&nbsp;python -m venv venv<br>
+&nbsp;&nbsp;env\Scripts\activate<br>
+&nbsp;&nbsp;pip install -r requirements.txt<br> 
+&nbsp;&nbsp;python main.py<br>
 
 ## 🎮 Comment jouer ? 
 - **Contrôles** : Flèches directionnelles pour se déplacer.
