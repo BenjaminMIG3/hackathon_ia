@@ -1,82 +1,111 @@
 import pygame
 import random
 
-# Initialisation de pygame
+# Initialisation de Pygame
 pygame.init()
 
-# Définition des constantes
-WIDTH, HEIGHT = 600, 400
-SNAKE_SIZE = 10
-VELOCITY = 10
-WHITE, GREEN, RED, BLACK, GRID_COLOR = (255, 255, 255), (0, 255, 0), (255, 0, 0), (0, 0, 0), (50, 50, 50)
+# Constantes
+LARGEUR, HAUTEUR = 800, 600
+TAILLE_CASE = 40  # Cases deux fois plus grandes
+FENETRE = pygame.display.set_mode((LARGEUR, HAUTEUR))
+pygame.display.set_caption("Snake")
 
-# Création de la fenêtre
-win = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Snake Game")
+# Couleurs
+BLANC = (255, 255, 255)
+VERT = (0, 255, 0)
+ROUGE = (255, 0, 0)
+NOIR = (0, 0, 0)
+GRIS = (100, 100, 100)  # Couleur pour le cadrillage
 
-# Charger l'image de fond
+# Classe pour le serpent
+class Serpent:
+    def __init__(self):
+        self.taille = 1
+        self.corps = [((LARGEUR // 2) - (LARGEUR // 2) % TAILLE_CASE, 
+                       (HAUTEUR // 2) - (HAUTEUR // 2) % TAILLE_CASE)]
+        self.direction = (TAILLE_CASE, 0)  # Départ vers la droite
+        self.nouvelle_direction = self.direction
+
+    def bouger(self):
+        self.direction = self.nouvelle_direction
+        tete_x, tete_y = self.corps[0]
+        dx, dy = self.direction
+        nouvelle_tete = ((tete_x + dx) % LARGEUR, (tete_y + dy) % HAUTEUR)
+        self.corps.insert(0, nouvelle_tete)
+        if len(self.corps) > self.taille:
+            self.corps.pop()
+
+    def grandir(self):
+        self.taille += 1
+
+    def collision(self):
+        return self.corps[0] in self.corps[1:]
+
+# Position initiale de la nourriture
+def nouvelle_nourriture(serpent):
+    while True:
+        x = random.randrange(0, LARGEUR, TAILLE_CASE)
+        y = random.randrange(0, HAUTEUR, TAILLE_CASE)
+        if (x, y) not in serpent.corps:
+            return (x, y)
+
+# Charger et redimensionner l'image de fond
 background = pygame.image.load("image.png")
-background = pygame.transform.scale(background, (WIDTH, HEIGHT))  # Adapter à la taille de la fenêtre
+background = pygame.transform.scale(background, (LARGEUR, HAUTEUR))  # Correction : LARGEUR, HAUTEUR
 
-# Fonction principale du jeu
-def game():
-    snake_pos = [[100, 50]]
-    direction = 'RIGHT'
-    food_pos = [random.randrange(1, WIDTH//SNAKE_SIZE) * SNAKE_SIZE,
-                random.randrange(1, HEIGHT//SNAKE_SIZE) * SNAKE_SIZE]
-    running, grow = True, False
-    clock = pygame.time.Clock()
+# Initialisation
+serpent = Serpent()
+nourriture = nouvelle_nourriture(serpent)
+vitesse = 10
+horloge = pygame.time.Clock()
+en_cours = True
 
-    while running:
-        pygame.time.delay(100)
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT and direction != 'RIGHT':
-                    direction = 'LEFT'
-                elif event.key == pygame.K_RIGHT and direction != 'LEFT':
-                    direction = 'RIGHT'
-                elif event.key == pygame.K_UP and direction != 'DOWN':
-                    direction = 'UP'
-                elif event.key == pygame.K_DOWN and direction != 'UP':
-                    direction = 'DOWN'
+# Boucle principale
+while en_cours:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            en_cours = False
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_UP and serpent.direction != (0, TAILLE_CASE):
+                serpent.nouvelle_direction = (0, -TAILLE_CASE)
+            elif event.key == pygame.K_DOWN and serpent.direction != (0, -TAILLE_CASE):
+                serpent.nouvelle_direction = (0, TAILLE_CASE)
+            elif event.key == pygame.K_LEFT and serpent.direction != (TAILLE_CASE, 0):
+                serpent.nouvelle_direction = (-TAILLE_CASE, 0)
+            elif event.key == pygame.K_RIGHT and serpent.direction != (-TAILLE_CASE, 0):
+                serpent.nouvelle_direction = (TAILLE_CASE, 0)
 
-        # Déplacement du serpent
-        x, y = snake_pos[0]
-        if direction == 'LEFT': x -= SNAKE_SIZE
-        if direction == 'RIGHT': x += SNAKE_SIZE
-        if direction == 'UP': y -= SNAKE_SIZE
-        if direction == 'DOWN': y += SNAKE_SIZE
-        snake_pos.insert(0, [x, y])
+    # Mouvement du serpent
+    serpent.bouger()
 
-        # Vérification de la collision avec la nourriture
-        if snake_pos[0] == food_pos:
-            food_pos = [random.randrange(1, WIDTH//SNAKE_SIZE) * SNAKE_SIZE,
-                        random.randrange(1, HEIGHT//SNAKE_SIZE) * SNAKE_SIZE]
-        else:
-            snake_pos.pop()
+    # Vérifier si le serpent mange la nourriture
+    if serpent.corps[0] == nourriture:
+        serpent.grandir()
+        nourriture = nouvelle_nourriture(serpent)
 
-        # Vérification des collisions avec les murs ou le corps du serpent
-        if (x < 0 or x >= WIDTH or y < 0 or y >= HEIGHT or snake_pos[0] in snake_pos[1:]):
-            running = False
+    # Vérifier les collisions
+    if serpent.collision():
+        en_cours = False
 
-        # Affichage
-        win.blit(background, (0, 0))  # Dessiner l'image de fond
-        
-        # Dessiner le quadrillage
-        for i in range(0, WIDTH, SNAKE_SIZE):
-            pygame.draw.line(win, GRID_COLOR, (i, 0), (i, HEIGHT))
-        for j in range(0, HEIGHT, SNAKE_SIZE):
-            pygame.draw.line(win, GRID_COLOR, (0, j), (WIDTH, j))
-        
-        pygame.draw.rect(win, RED, (*food_pos, SNAKE_SIZE, SNAKE_SIZE))
-        for segment in snake_pos:
-            pygame.draw.rect(win, GREEN, (*segment, SNAKE_SIZE, SNAKE_SIZE))
-        pygame.display.update()
-        clock.tick(10)
+    # Dessiner
+    # Afficher l'image de fond
+    FENETRE.blit(background, (0, 0))
 
-    pygame.quit()
+    # Dessiner le cadrillage
+    for x in range(0, LARGEUR, TAILLE_CASE):
+        pygame.draw.line(FENETRE, GRIS, (x, 0), (x, HAUTEUR))  # Lignes verticales
+    for y in range(0, HAUTEUR, TAILLE_CASE):
+        pygame.draw.line(FENETRE, GRIS, (0, y), (LARGEUR, y))  # Lignes horizontales
 
-if __name__ == "__main__":
-    game()
+    # Dessiner le serpent et la nourriture par-dessus
+    for segment in serpent.corps:
+        pygame.draw.rect(FENETRE, VERT, (segment[0], segment[1], TAILLE_CASE, TAILLE_CASE))
+    pygame.draw.rect(FENETRE, ROUGE, (nourriture[0], nourriture[1], TAILLE_CASE, TAILLE_CASE))
+
+    # Mettre à jour l’affichage
+    pygame.display.flip()
+    horloge.tick(vitesse)
+
+# Fermer Pygame
+pygame.quit()
+print(f"Score final : {serpent.taille - 1}")
