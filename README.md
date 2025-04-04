@@ -3,12 +3,13 @@
 **Deep Snake** est un jeu inspiré de Snake, où tu incarnes un serveur qui dévore tes IA génératives préférées. Plus tu en manges, plus tu surcharges... jusqu'à la surchauffe et l'effondrement. Ce jeu dénonce la consommation énergétique massive des systèmes d'IA.
 
 ## Lancement : 
-**Mac** : main.app à la racine
-**Windows** : - se mettre à la racine du projet
-              - entrer les commandes python suivantes :   python -m venv venv 
-                                                          env\Scripts\activate
-                                                          pip install -r requirements.txt 
-                                                          python main.py
+**Mac ARM** : main.app à la racine<br> 
+**Windows** : à la racine du projet, exécuter les commandes suivantes :<br>
+
+&nbsp;&nbsp;python -m venv venv<br>
+&nbsp;&nbsp;env\Scripts\activate<br>
+&nbsp;&nbsp;pip install -r requirements.txt<br> 
+&nbsp;&nbsp;python main.py<br>
 
 ## 🎮 Comment jouer ? 
 - **Contrôles** : Flèches directionnelles pour se déplacer.
@@ -18,3 +19,13 @@
 - **Python** : Pour exécuter le jeu.
 - **Sprites 2D** : Pour les visuels minimalistes.
 - **Grok (IA)** : Pour aider à la création du code du jeu.
+
+
+## Réalisateurs
+- **Benjamin DUSUNCELI**<br>
+- **Ilyes YOUSSOUFA**<br>
+- **Julien FOUQUET**<br>
+- **Evan DESAMORE**<br>
+- **Elodie SENEL**<br>
+- **Miguel FENEROL**<br>
+
